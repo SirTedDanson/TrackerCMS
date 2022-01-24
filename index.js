@@ -11,15 +11,34 @@ const db = mysql.createConnection(
   console.log('Connected to the employee database.')
 );
 
+// READ: Array of all departmen tnames
+const departmentNames = () => {
+  return db.promise().query(`SELECT * FROM department`)
+    .then(([rows, fields]) => {
+      const departments = (rows.map(({ name }) => name))
+      return departments;
+ })
+};
+
+// READ: Return an object containing the data from the user created role
+const createRoleInfo = (selection) => {
+  return db.promise().query(`SELECT * FROM department`)
+    .then(([rows, fields]) => {
+      const departmentId = (rows.filter(({ name }) => name === selection.department).map(({ id }) => id)[0])
+      const roleName = selection.name;
+      const roleSalary = selection.salary;
+      return({roleName, roleSalary, departmentId});
+    })
+};
+
 // READ: View all departments
 const viewDepartments = () => {
-  db.query(`SELECT * FROM department`, (err, rows) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log(rows);
-  });
+  return db.promise().query(`SELECT * FROM department`)
+    .then(([rows, fields]) => {
+      console.log(rows)
+    })
 };
+
 // READ: View all roles
 const viewRoles = () => {
   db.query(
@@ -42,7 +61,8 @@ const viewEmployees = () => {
     FROM employee
     LEFT JOIN role ON employee.role_id = role.id;
     `, (err, rows) => {
-    if (err) {FF
+    if (err) {
+      FF
       console.log(err);
     }
     console.log(rows);
@@ -50,10 +70,10 @@ const viewEmployees = () => {
 };
 
 // CREATE: Add a department
-const addDepartment = () => {
+const addDepartment = (name) => {
   const sql = `INSERT INTO department (name)
     VALUES (?)`;
-  const params = ['Customer Service']; //body.name
+  const params = [name]; //body.name
   db.query(sql, params, (err, rows) => {
     if (err) {
       console.log(err);
@@ -62,10 +82,10 @@ const addDepartment = () => {
   });
 };
 // CREATE: Add a role
-const addRole = () => {
+const addRole = (name, salary, department) => {
   const sql = `INSERT INTO role (title, salary, department_id)
     VALUES (?,?,?)`;
-  const params = ['Process Auditor', '78000', '1']; //body.title, body.salary, body.department_id
+  const params = [name, salary, department]; //body.title, body.salary, body.department_id
   db.query(sql, params, (err, rows) => {
     if (err) {
       console.log(err);
@@ -86,3 +106,14 @@ const addEmployee = () => {
     console.log(rows);
   });
 };
+
+module.exports = {
+  viewDepartments,
+  departmentNames,
+  createRoleInfo,
+  viewRoles,
+  viewEmployees,
+  addDepartment,
+  addRole,
+  addEmployee
+}
