@@ -1,0 +1,30 @@
+{
+  "name": "employee-database-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirTedDanson/employee-database-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SirTedDanson/employee-database-manager/issues"
+  },
+  "homepage": "https://github.com/SirTedDanson/employee-database-manager#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.0",
+    "jest": "^27.4.7",
+    "mysql2": "^2.3.3"
+  }
+}
