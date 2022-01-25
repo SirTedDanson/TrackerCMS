@@ -10,32 +10,46 @@ const db = mysql.createConnection(
   },
   console.log('Connected to the employee database.')
 );
-
-// READ: Array of all departmen tnames
-const departmentNames = () => {
-  return db.promise().query(`SELECT * FROM department`)
+// READ: Find id of data selection
+const idFinder = (data, column, table) => {
+  return db.promise().query(`SELECT id FROM ${table} WHERE ${column} = "${data.choice}"`)
     .then(([rows, fields]) => {
-      const departments = (rows.map(({ name }) => name))
-      return departments;
+      const id = rows[0];
+      const newRole = {...id, ...data};
+      return (newRole);
  })
 };
 
-// READ: Return an object containing the data from the user created role
-const createRoleInfo = (selection) => {
+// READ: Returns array of all department names
+const departmentNames = () => {
   return db.promise().query(`SELECT * FROM department`)
     .then(([rows, fields]) => {
-      const departmentId = (rows.filter(({ name }) => name === selection.department).map(({ id }) => id)[0])
-      const roleName = selection.name;
-      const roleSalary = selection.salary;
-      return({roleName, roleSalary, departmentId});
-    })
+      const departments = (rows.map(({ name }) => name));
+      return departments;
+ })
+};
+// READ: Returns array of all employee roles
+const employeeRoles = () => {
+  return db.promise().query(`SELECT * FROM role`)
+    .then(([rows, fields]) => {
+      const roles = (rows.map(({ title }) => title));
+      return roles;
+ })
+};
+// READ: Returns array of all employees
+const employeeList = (roles) => {
+  return db.promise().query(`SELECT id, first_name, last_name FROM employee`)
+  .then(([rows, fields]) => {
+    const employees = rows.map(({ id, first_name, last_name }) => (id +" "+ first_name +" "+ last_name));
+    return({employees, roles});
+})
 };
 
 // READ: View all departments
 const viewDepartments = () => {
   return db.promise().query(`SELECT * FROM department`)
     .then(([rows, fields]) => {
-      console.log(rows)
+      console.log(rows);
     })
 };
 
@@ -82,7 +96,8 @@ const addDepartment = (name) => {
   });
 };
 // CREATE: Add a role
-const addRole = (name, salary, department) => {
+const addRole = (department, name, salary) => {
+  console.log(department, name, salary);
   const sql = `INSERT INTO role (title, salary, department_id)
     VALUES (?,?,?)`;
   const params = [name, salary, department]; //body.title, body.salary, body.department_id
@@ -95,13 +110,26 @@ const addRole = (name, salary, department) => {
 };
 
 // CREATE: Add a employee
-const addEmployee = () => {
+const addEmployee = (id, firstName, lastName) => {
+  const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+    VALUES (?,?,?,?)`;
+  const params = [`${firstName}`, `${lastName}`, `${id}`, null]; //body.first_name, body.last_name, body.role_id, body.manager_id
+  db.query(sql, params, (err, rows) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(rows);
+  });
+};
+
+// UPDATE: Update an employee role
+const updateRole = (roleId, employeeId) => {
   const sql = 
     `
-    INSERT INTO employee (first_name, last_name, role_id, manager_id)
-    VALUES (?,?,?,?)
+    UPDATE employee SET role_id = ?
+    WHERE id = ?;
     `;
-  const params = ['Tom', 'Williams', '8', '2']; //body.first_name, body.last_name, body.role_id, body.manager_id
+  const params = [`${roleId}`, `${employeeId}`]; //req.body.role_id, req.params.id
   db.query(sql, params, (err, rows) => {
     if (err) {
       console.log(err);
@@ -129,10 +157,13 @@ const updateRole = () => {
 module.exports = {
   viewDepartments,
   departmentNames,
-  createRoleInfo,
+  idFinder,
+  employeeRoles,
   viewRoles,
   viewEmployees,
   addDepartment,
   addRole,
-  addEmployee
-}
+  addEmployee,
+  updateRole,
+  employeeList
+};
