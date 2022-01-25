@@ -27,15 +27,15 @@ VALUES
   ('Administrative Assistant', '51000', 4),
   ('Administrative Assistant', '50000', 5);
 
-INSERT INTO employee(first_name, last_name, role_id)
+INSERT INTO employee(first_name, last_name, role_id, manager_id)
 VALUES
-  ('Mia', 'Yang', 4),
-  ('Joanna', 'Smith', 12),
-  ('Leonie', 'Green', 9),
-  ('Ashley', 'Miller', 15),
-  ('Peter', 'White', 7),
-  ('Bob', 'Lee', 1),
-  ('Marty', 'Wood', 17),
-  ('Angel', 'Hill', 11),
-  ('Sandra', 'Foster', 10),
-  ('Ruby', 'Clark', 8);
+  ('Mia', 'Yang', 4, null),
+  ('Joanna', 'Smith', 12, 4),
+  ('Leonie', 'Green', 9, 4),
+  ('Ashley', 'Miller', 15, 4),
+  ('Peter', 'White', 7, null),
+  ('Bob', 'Lee', 1, null),
+  ('Marty', 'Wood', 17, 1),
+  ('Angel', 'Hill', 11, 1),
+  ('Sandra', 'Foster', 10, 1),
+  ('Ruby', 'Clark', 8, 1);

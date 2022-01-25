@@ -22,17 +22,17 @@ const idFinder = (data, column, table) => {
 
 // READ: Returns array of all department names
 const departmentNames = () => {
-  return db.promise().query(`SELECT * FROM department`)
+  return db.promise().query(`SELECT id, name FROM department`)
     .then(([rows, fields]) => {
-      const departments = (rows.map(({ name }) => name));
+      const departments = (rows.map(({ id, name }) => (id +" "+ name)));
       return departments;
  })
 };
 // READ: Returns array of all employee roles
 const employeeRoles = () => {
-  return db.promise().query(`SELECT * FROM role`)
+  return db.promise().query(`SELECT id, title FROM role`)
     .then(([rows, fields]) => {
-      const roles = (rows.map(({ title }) => title));
+      const roles = (rows.map(({ id, title }) => (id +" "+ title)));
       return roles;
  })
 };
@@ -70,8 +70,7 @@ const viewRoles = () => {
 // READ: View all employees
 const viewEmployees = () => {
   db.query(
-    `SELECT 
-    employee.id, employee.first_name, employee.last_name, role.title AS job_title, role.salary, employee.manager_id AS manager
+    `SELECT employee.id, employee.first_name, employee.last_name, role.title AS job_title, role.salary, employee.manager_id AS manager
     FROM employee
     LEFT JOIN role ON employee.role_id = role.id;
     `, (err, rows) => {
@@ -82,7 +81,6 @@ const viewEmployees = () => {
     console.log(rows);
   });
 };
-
 // CREATE: Add a department
 const addDepartment = (name) => {
   const sql = `INSERT INTO department (name)
@@ -113,7 +111,7 @@ const addRole = (department, name, salary) => {
 const addEmployee = (id, firstName, lastName) => {
   const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
     VALUES (?,?,?,?)`;
-  const params = [`${firstName}`, `${lastName}`, `${id}`, null]; //body.first_name, body.last_name, body.role_id, body.manager_id
+  const params = [firstName, lastName, id, null]; //body.first_name, body.last_name, body.role_id, body.manager_id
   db.query(sql, params, (err, rows) => {
     if (err) {
       console.log(err);
@@ -129,23 +127,7 @@ const updateRole = (roleId, employeeId) => {
     UPDATE employee SET role_id = ?
     WHERE id = ?;
     `;
-  const params = [`${roleId}`, `${employeeId}`]; //req.body.role_id, req.params.id
-  db.query(sql, params, (err, rows) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log(rows);
-  });
-};
-
-// UPDATE: Update an employee role
-const updateRole = () => {
-  const sql = 
-    `
-    UPDATE employee SET role_id = ?
-    WHERE id = ?;
-    `;
-  const params = ['10', '4']; //req.body.role_id, req.params.id
+  const params = [roleId, employeeId]; 
   db.query(sql, params, (err, rows) => {
     if (err) {
       console.log(err);
