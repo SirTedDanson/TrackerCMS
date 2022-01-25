@@ -10,46 +10,46 @@ const db = mysql.createConnection(
   },
   console.log('Connected to the employee database.')
 );
-
+// READ: Find id of data selection
 const idFinder = (data, column, table) => {
   return db.promise().query(`SELECT id FROM ${table} WHERE ${column} = "${data.choice}"`)
     .then(([rows, fields]) => {
-      const id = rows[0]
-      const newRole = {...id, ...data}
+      const id = rows[0];
+      const newRole = {...id, ...data};
       return (newRole);
  })
-}
+};
 
-// READ: Array of all department names
+// READ: Returns array of all department names
 const departmentNames = () => {
   return db.promise().query(`SELECT * FROM department`)
     .then(([rows, fields]) => {
-      const departments = (rows.map(({ name }) => name))
+      const departments = (rows.map(({ name }) => name));
       return departments;
  })
 };
-
+// READ: Returns array of all employee roles
 const employeeRoles = () => {
   return db.promise().query(`SELECT * FROM role`)
     .then(([rows, fields]) => {
-      const roles = (rows.map(({ title }) => title))
+      const roles = (rows.map(({ title }) => title));
       return roles;
  })
 };
-
+// READ: Returns array of all employees
 const employeeList = (roles) => {
   return db.promise().query(`SELECT id, first_name, last_name FROM employee`)
   .then(([rows, fields]) => {
-    const employees = rows.map(({ id, first_name, last_name }) => (id +" "+ first_name +" "+ last_name))
+    const employees = rows.map(({ id, first_name, last_name }) => (id +" "+ first_name +" "+ last_name));
     return({employees, roles});
 })
-}
+};
 
 // READ: View all departments
 const viewDepartments = () => {
   return db.promise().query(`SELECT * FROM department`)
     .then(([rows, fields]) => {
-      console.log(rows)
+      console.log(rows);
     })
 };
 
@@ -150,4 +150,4 @@ module.exports = {
   addEmployee,
   updateRole,
   employeeList
-}
+};
