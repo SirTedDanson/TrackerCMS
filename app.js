@@ -57,7 +57,7 @@ class Application {
             })
           break;
         case 'Add Role':
-          await employeeDb.departmentNames()
+          await employeeDb.departmentList()
             .then(departments => prompt.rolePrompt(departments))
             .then(input => {
               const departmentId = input.choice.split(":", 1)[0];
@@ -65,7 +65,7 @@ class Application {
             })
           break;
         case 'Add Employee':
-          await employeeDb.employeeRoles()
+          await employeeDb.rolesList()
             .then(roles => prompt.employeePrompt(roles))
             .then(input => {
               const employeeId = input.choice.split(":", 1)[0];
@@ -73,7 +73,7 @@ class Application {
             })
           break;
         case 'Update Employee Role':
-          await employeeDb.employeeRoles()
+          await employeeDb.rolesList()
             .then(roles => employeeDb.employeeList(roles))
             .then(data => prompt.updatePrompt(data))
             .then(input => {
