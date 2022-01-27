@@ -10,7 +10,7 @@
   <br />
   <br />
 
-  <h1 align="center">Team Profile Generator</h1>
+  <h1 align="center">EmployeeDB-CMS</h1>
 
   <p align="center">
     <a href="https://github.com/SirTedDanson/employeeDB-CMS"><strong>Project Documents »</strong></a>
