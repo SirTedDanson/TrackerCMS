@@ -58,8 +58,8 @@
 
   ## Screenshot
 
-  ![Application Screenshot](./assets/images/application-screenshot.PNG)
-  ![Application GIF](./assets/images/demo-gif.gif)
+  ![Application Screenshot](./lib/images/application-screenshot.PNG)
+  ![Application GIF](./lib/images/demo-gif.gif)
   
 ---
 
@@ -67,7 +67,6 @@
 
   - Fork and clone files from repository.
   - Open VSCode in root directory.
-  - run `npm init` in terminal.
   - run `npm install` in terminal.
 
   <p align="right">(<a href="#top">back to top</a>)</p>
@@ -241,8 +240,6 @@
   ## Tests
 
   - Building test suite.
-
-  ![Test GIF](./images/test-demo.gif)
 
   <p align="right">(<a href="#top">back to top</a>)</p>
 
