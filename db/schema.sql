@@ -3,13 +3,13 @@ DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS employee;
 
 CREATE TABLE department (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(30) NOT NULL
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(30)
 );
 
 CREATE TABLE role (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(30) NOT NULL,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(30),
   salary DECIMAL(10,0),
   department_id INTEGER,
   FOREIGN KEY (department_id)
@@ -18,13 +18,13 @@ CREATE TABLE role (
 );
 
 CREATE TABLE employee (
-  id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  first_name VARCHAR(30) NOT NULL,
-  last_name VARCHAR(30) NOT NULL,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(30),
+  last_name VARCHAR(30),
   role_id INTEGER,
   FOREIGN KEY (role_id)
   REFERENCES role (id)
   ON DELETE SET NULL,
-  manager_id INTEGER NULL
- -- FOREIGN KEY (manager_id) REFERENCES employee(id)
+  manager_id INTEGER,
+  FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
