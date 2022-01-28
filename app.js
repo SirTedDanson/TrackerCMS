@@ -35,7 +35,8 @@ class Application {
               'Add Department',
               'Add Role',
               'Add Employee',
-              'Update Employee Role'
+              'Update Employee Role',
+              'Update Employee Manager'
             ]
         },
       ]).then(selection => {
@@ -106,14 +107,32 @@ class Application {
             return employeeDb.viewEmployees(data);
           })
           .then(data => {
-            const roleArray = data.roles.filter(data => data.Title !== 'Manager').map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
+            const roleArray = data.promiseData.filter(data => data.Title !== 'Manager').map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
             const employeeArray = data.rows.map(({ ID, First_Name, Last_Name }) => (ID + ": " + First_Name + " " + Last_Name));
-            return prompt.updatePrompt(roleArray, employeeArray)
+            return prompt.updateEmployee(roleArray, employeeArray)
           })
           .then(input => {
             const employeeId = input.employee.split(":", 1)[0];
             const roleId = input.role.split(":", 1)[0];
             return employeeDb.updateRole(roleId, employeeId);
+          })
+        break;
+      case 'Update Employee Manager':
+        await employeeDb.viewManagers()
+          .then(data => {
+            return employeeDb.viewEmployees(data);
+          })
+          .then(data => {
+            const managerArray = data.promiseData.map(({ ID, Manager, Department }) => (ID + ": " + Manager + " | " + Department));
+            console.log(data.rows)
+            const employeeArray = data.rows.filter(data => data.Title !== 'Manager').map(({ ID, First_Name, Last_Name, Title }) => (ID + ": " + First_Name + " " + Last_Name+ " | " + Title));
+            return prompt.updateManager(managerArray, employeeArray);
+          })
+          .then(input => {
+            const employeeId = input.employee.split(":", 1)[0];
+            const managerId = input.manager.split(":", 1)[0];
+            console.log(employeeId, managerId);
+            return employeeDb.updateManager(managerId, employeeId);
           })
         break;
     };
