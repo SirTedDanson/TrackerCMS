@@ -75,9 +75,10 @@
   ## Usage 
 
   - Open VSCode in root directory.
-  - Type `node app.js` in the terminal to initialize the application.
+  - Type `node index.js` in the terminal to initialize the application.
   - The application main menu will appear in the terminal
   - The user can manipulate the database in any of the ways listed in the main menu
+  - CTRL + C to EXIT the command line application
 
   <p align="right">(<a href="#top">back to top</a>)</p>
   

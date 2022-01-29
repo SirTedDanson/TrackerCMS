@@ -2,10 +2,11 @@ const inquirer = require('inquirer');
 const Query = require('./lib/Query');
 const Prompts = require('./lib/Prompts');
 const cTable = require('console.table');
+// Initialize the Query and Prompt classes
 const employeeDb = new Query;
 const prompt = new Prompts;
 
-// Starting menu
+// Application object
 class Application {
   applicationStart() {
     console.log(`
@@ -19,7 +20,7 @@ class Application {
     this.applicationMenu();
   }
   applicationMenu() {
-    // initialize inqurirer to gather user input
+    // Initialize inquirer to gather user input
     return inquirer
       .prompt([
         {
@@ -27,6 +28,7 @@ class Application {
           name: 'menu',
           message: 'Would you like to to do?',
           choices:
+            // Starting Menu
             [
               'View Department',
               'View Roles',
@@ -48,16 +50,16 @@ class Application {
         this.menuHandler(selection.menu);
       })
   };
-
-
+  // Async switch function to handle menu selections 
   menuHandler = async selection => {
     switch (selection) {
-      case 'View Department':
+      // READ operations, returns formatted tables in console
+      case 'View Department': 
         await employeeDb.viewDepartments()
           .then(data => {
             return console.table(data);
           });
-        break;
+        break;  
       case 'View Roles':
         await employeeDb.viewRoles()
           .then(data => {
@@ -88,21 +90,27 @@ class Application {
             return console.table(data);
           });
         break;
+        // CREATE/UPDATE/DELETE:
+        // DATA VALIDATION: SQL database is queried (READ) when it can 
+        // to provide validated data to the prompts for user selection
+        // in lists rather than validating user inputed text
       case 'Add Department':
         await prompt.departmentPrompt()
           .then(department => {
-            return employeeDb.addDepartment(department.name);
+            return employeeDb.addDepartment(department.name); // CREATE operation
           })
         break;
       case 'Add Role':
         await employeeDb.viewDepartments()
           .then(data => {
+            // Create an array of choices by mapping/filtering the returned promise object from the SQL query
             const deptArray = data.map(({ ID, Department }) => (ID + ": " + Department));
-            return prompt.rolePrompt(deptArray)
+            return prompt.rolePrompt(deptArray) // Send array, created from a db query, to the user input prompt as a list
           })
           .then(input => {
+            // Determine ID by parsing the user selection from the prompts  
             const deptId = input.choice.split(":", 1)[0];
-            return employeeDb.addRole(deptId, input.name, input.salary);
+            return employeeDb.addRole(deptId, input.name, input.salary); // CREATE operation (this general process is repeated for all CREATE operations)
           })
         break;
       case 'Add Employee':
@@ -110,12 +118,17 @@ class Application {
           .then(data => {
             const managerArray = data.filter(data => data.Title === 'Manager').map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
             const roleArray = data.filter(data => data.Title !== 'Manager').map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
-            return prompt.employeePrompt(roleArray, managerArray.push(null));
+            managerArray.push('No Manager')
+            return prompt.employeePrompt(roleArray, managerArray);
           })
           .then(input => {
+            if (input.manager === 'No Manager') {
+              var managerId = null;
+            } else {
+              var managerId = input.manager.split(":", 1)[0];
+            }
             const roleId = input.role.split(":", 1)[0];
-            const managerId = input.manager.split(":", 1)[0];
-            return employeeDb.addEmployee(input.firstName, input.lastName, roleId, managerId);
+            return employeeDb.addEmployee(input.firstName, input.lastName, roleId, managerId); // CREATE operation
           })
         break;
       case 'Update Employee Role':
@@ -131,7 +144,7 @@ class Application {
           .then(input => {
             const employeeId = input.employee.split(":", 1)[0];
             const roleId = input.role.split(":", 1)[0];
-            return employeeDb.updateRole(roleId, employeeId);
+            return employeeDb.updateRole(roleId, employeeId); // UPDATE operation
           })
         break;
       case 'Update Employee Manager':
@@ -147,7 +160,7 @@ class Application {
           .then(input => {
             const employeeId = input.employee.split(":", 1)[0];
             const managerId = input.manager.split(":", 1)[0];
-            return employeeDb.updateManager(managerId, employeeId);
+            return employeeDb.updateManager(managerId, employeeId); // UPDATE operation
           })
         break;
       case 'Delete Employee':
@@ -157,7 +170,7 @@ class Application {
             return prompt.deleteEmp(employeeArray);
           })
           .then(input => {
-            return employeeDb.deleteEmp(input.employee.split(":", 1)[0]);
+            return employeeDb.deleteEmp(input.employee.split(":", 1)[0]); // DELETE operation
           })
         break;
       case 'Delete Role':
@@ -167,7 +180,7 @@ class Application {
             return prompt.deleteRole(roleArray);
           })
           .then(input => {
-            return employeeDb.deleteRole(input.role.split(":", 1)[0]);
+            return employeeDb.deleteRole(input.role.split(":", 1)[0]); // DELETE operation
           })
         break;
       case 'Delete Department':
@@ -177,12 +190,12 @@ class Application {
             return prompt.deleteDept(deptArray);
           })
           .then(input => {
-            return employeeDb.deleteDept(input.role.split(":", 1)[0]);
+            return employeeDb.deleteDept(input.role.split(":", 1)[0]); // DELETE operation
           })
         break;
     };
-    this.applicationMenu();
+    this.applicationMenu(); // Relaunch main menu after operation complete
   };
 };
-
+// Launch application
 new Application().applicationStart();
