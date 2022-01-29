@@ -42,7 +42,7 @@ VALUES
   ('Aleah', 'Ramirez', 16), -- Accounting, AA
   ('Campbell', 'Pena', 4), -- HR Manager
   ('Kai', 'Best', 14), -- HR
-  ('Makenzie Perez', 'Perez', 15), -- HR
+  ('Makenzie', 'Perez', 15), -- HR
   ('Noah', 'Harper', 17), -- HR, AA
   ('Lawrence', 'Stone', 11); -- Auditor (no manager)
 

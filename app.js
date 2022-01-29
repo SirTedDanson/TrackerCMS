@@ -30,8 +30,10 @@ class Application {
             [
               'View Department',
               'View Roles',
-              'View Employees',
               'View Managers',
+              'View Employees by ID',
+              'View Employees by Manager',
+              'View Employees by Department',
               'Add Department',
               'Add Role',
               'Add Employee',
@@ -59,14 +61,26 @@ class Application {
             return console.table(data);
           });
         break;
-      case 'View Employees':
-        await employeeDb.viewEmployees()
+      case 'View Managers':
+        await employeeDb.viewManagers()
           .then(data => {
             return console.table(data);
           });
         break;
-      case 'View Managers':
-        await employeeDb.viewManagers()
+      case 'View Employees by ID':
+        await employeeDb.viewEmpsId()
+          .then(data => {
+            return console.table(data);
+          });
+        break;
+      case 'View Employees by Manager':
+        await employeeDb.viewEmpsManager()
+          .then(data => {
+            return console.table(data);
+          });
+        break;
+      case 'View Employees by Department':
+        await employeeDb.viewEmpsDept()
           .then(data => {
             return console.table(data);
           });
@@ -104,10 +118,10 @@ class Application {
       case 'Update Employee Role':
         await employeeDb.viewRoles()
           .then(data => {
-            return employeeDb.viewEmployees(data);
+            return employeeDb.viewEmpsId(data);
           })
           .then(data => {
-            const roleArray = data.promiseData.filter(data => data.Title !== 'Manager').map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
+            const roleArray = data.promiseData.map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
             const employeeArray = data.rows.map(({ ID, First_Name, Last_Name }) => (ID + ": " + First_Name + " " + Last_Name));
             return prompt.updateEmployee(roleArray, employeeArray)
           })
@@ -120,18 +134,16 @@ class Application {
       case 'Update Employee Manager':
         await employeeDb.viewManagers()
           .then(data => {
-            return employeeDb.viewEmployees(data);
+            return employeeDb.viewEmpsId(data);
           })
           .then(data => {
             const managerArray = data.promiseData.map(({ ID, Manager, Department }) => (ID + ": " + Manager + " | " + Department));
-            console.log(data.rows)
-            const employeeArray = data.rows.filter(data => data.Title !== 'Manager').map(({ ID, First_Name, Last_Name, Title }) => (ID + ": " + First_Name + " " + Last_Name+ " | " + Title));
+            const employeeArray = data.rows.filter(data => data.Title !== 'Manager').map(({ ID, First_Name, Last_Name, Title }) => (ID + ": " + First_Name + " " + Last_Name + " | " + Title));
             return prompt.updateManager(managerArray, employeeArray);
           })
           .then(input => {
             const employeeId = input.employee.split(":", 1)[0];
             const managerId = input.manager.split(":", 1)[0];
-            console.log(employeeId, managerId);
             return employeeDb.updateManager(managerId, employeeId);
           })
         break;
