@@ -44,7 +44,7 @@
 
   ## Description 
 
-  This a command line application that allows a user to manage an SQL employee database via node.js with CRUD operations. Create a database with departments, employees, associated roles, salaries and managers. 
+  TrackerCMS is a command line application using node.js that allows a user to manage an SQL employee database with CRUD operations. Creates a database with departments, employees, associated roles, salaries and managers. The main menu allows a user to manipulate the database in a number of ways.
 
   <p align="right">(<a href="#top">back to top</a>)</p>
   
