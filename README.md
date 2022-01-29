@@ -66,7 +66,7 @@
   ## Installation
 
   - Fork and clone files from repository.
-  - Open VSCode in root directory.
+  - Open VSCode, GitBash or your command line in the root directory.
   - run `npm install` in terminal.
 
   <p align="right">(<a href="#top">back to top</a>)</p>
@@ -74,7 +74,7 @@
 
   ## Usage 
 
-  - Open VSCode in root directory.
+  - Open VSCode, GitBash or your command line in root directory.
   - Type `node index.js` in the terminal to initialize the application.
   - The application main menu will appear in the terminal
   - The user can manipulate the database in any of the ways listed in the main menu
