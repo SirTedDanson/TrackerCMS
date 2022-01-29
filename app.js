@@ -38,7 +38,8 @@ class Application {
               'Add Role',
               'Add Employee',
               'Update Employee Role',
-              'Update Employee Manager'
+              'Update Employee Manager',
+              'Delete Employee'
             ]
         },
       ]).then(selection => {
@@ -145,6 +146,16 @@ class Application {
             const employeeId = input.employee.split(":", 1)[0];
             const managerId = input.manager.split(":", 1)[0];
             return employeeDb.updateManager(managerId, employeeId);
+          })
+        break;
+      case 'Delete Employee':
+        await employeeDb.viewEmpsId()
+          .then(data => {
+            const employeeArray = data.map(({ ID, First_Name, Last_Name, Title }) => (ID + ": " + First_Name + " " + Last_Name + " | " + Title));
+            return prompt.deleteEmployee(employeeArray);
+          })
+          .then(input => {
+            return employeeDb.deleteEmployee(input.employee.split(":", 1)[0]);
           })
         break;
     };
