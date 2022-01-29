@@ -39,7 +39,9 @@ class Application {
               'Add Employee',
               'Update Employee Role',
               'Update Employee Manager',
-              'Delete Employee'
+              'Delete Employee',
+              'Delete Role',
+              'Delete Department'
             ]
         },
       ]).then(selection => {
@@ -95,12 +97,12 @@ class Application {
       case 'Add Role':
         await employeeDb.viewDepartments()
           .then(data => {
-            const departmentArray = data.map(({ ID, Department }) => (ID + ": " + Department));
-            return prompt.rolePrompt(departmentArray)
+            const deptArray = data.map(({ ID, Department }) => (ID + ": " + Department));
+            return prompt.rolePrompt(deptArray)
           })
           .then(input => {
-            const departmentId = input.choice.split(":", 1)[0];
-            return employeeDb.addRole(departmentId, input.name, input.salary);
+            const deptId = input.choice.split(":", 1)[0];
+            return employeeDb.addRole(deptId, input.name, input.salary);
           })
         break;
       case 'Add Employee':
@@ -108,7 +110,7 @@ class Application {
           .then(data => {
             const managerArray = data.filter(data => data.Title === 'Manager').map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
             const roleArray = data.filter(data => data.Title !== 'Manager').map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
-            return prompt.employeePrompt(roleArray, managerArray);
+            return prompt.employeePrompt(roleArray, managerArray.push(null));
           })
           .then(input => {
             const roleId = input.role.split(":", 1)[0];
@@ -152,10 +154,30 @@ class Application {
         await employeeDb.viewEmpsId()
           .then(data => {
             const employeeArray = data.map(({ ID, First_Name, Last_Name, Title }) => (ID + ": " + First_Name + " " + Last_Name + " | " + Title));
-            return prompt.deleteEmployee(employeeArray);
+            return prompt.deleteEmp(employeeArray);
           })
           .then(input => {
-            return employeeDb.deleteEmployee(input.employee.split(":", 1)[0]);
+            return employeeDb.deleteEmp(input.employee.split(":", 1)[0]);
+          })
+        break;
+      case 'Delete Role':
+        await employeeDb.viewRoles()
+          .then(data => {
+            const roleArray = data.map(({ ID, Title, Department }) => (ID + ": " + Title + " " + "| " + Department));
+            return prompt.deleteRole(roleArray);
+          })
+          .then(input => {
+            return employeeDb.deleteRole(input.role.split(":", 1)[0]);
+          })
+        break;
+      case 'Delete Department':
+        await employeeDb.viewDepartments()
+          .then(data => {
+            const deptArray = data.map(({ ID, Department }) => (ID + ": " + Department));
+            return prompt.deleteDept(deptArray);
+          })
+          .then(input => {
+            return employeeDb.deleteDept(input.role.split(":", 1)[0]);
           })
         break;
     };
