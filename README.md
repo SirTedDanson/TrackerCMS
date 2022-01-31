@@ -16,7 +16,7 @@
     <a href="https://github.com/SirTedDanson/employeeDB-CMS"><strong>Project Documents »</strong></a>
     <br />
     <br />
-    <a href="">View Demo</a>
+    <a href="https://watch.screencastify.com/v/c1UGLgjppIxhB0bJolu2">View Demo</a>
     ·
     <a href="https://github.com/SirTedDanson/employeeDB-CMS/issues">Report Bug</a>
     ·
@@ -240,7 +240,7 @@
 
   ## Tests
 
-  - Building test suite.
+  - Building test suite. [View Demonstration](https://watch.screencastify.com/v/c1UGLgjppIxhB0bJolu2)
 
   <p align="right">(<a href="#top">back to top</a>)</p>
 

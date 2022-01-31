@@ -1,7 +1,8 @@
 const inquirer = require('inquirer');
+const cTable = require('console.table');
+
 const Query = require('./lib/Query');
 const Prompts = require('./lib/Prompts');
-const cTable = require('console.table');
 // Initialize the Query and Prompt classes
 const employeeDb = new Query;
 const prompt = new Prompts;
